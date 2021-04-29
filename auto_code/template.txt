@@ -1,0 +1,70 @@
+# coding: utf-8
+#!/usr/bin/env python
+
+from PyQt4 import QtGui,QtCore
+
+class %(class_name)s(QtGui.QWidget):
+    def __init__(self, parent=None):
+        super(%(class_name)s, self).__init__(parent)
+        self.items = parent.items if parent else {}
+        self.__init_datas()
+        self.__create_items()
+        self.__set_events()
+##        self.setModal(True)
+        self.setWindowTitle(u"%(class_title)s")
+##        self.setWindowFlags(QtCore.Qt.Dialog|QtCore.Qt.WindowCloseButtonHint)
+        self.trans = {"window_title":"%(class_trans)s"}
+        self.items["%(class_prefix)s_ui"] = self
+        self.__trans_items()
+
+    def __init_datas(self):
+        self.data = {}
+        self.data["mc_id"] = None
+        self.data["snaddr"] = "FF"
+        self.data["spaddr"] = "FF"
+        self.data["rcaddr"] = "FFFF"
+        self.data["operation"] = None
+        self.data["mode"] = "save"
+        self.data["argvs"] = []
+
+    def __create_items(self):
+        pass
+
+    def __set_events(self):
+        pass
+
+    def __set_ui_config(self):
+        """将数据表示到画面"""
+        pass
+
+    def __get_ui_config(self):
+        """将画面数据保存到结构体"""
+        pass
+
+    def __trans_items(self):
+        if self.parent() is None:
+            return
+        self.parent().trans_items("%(class_prefix)s")
+
+    def __send_request(self, data, show_msg=0, msg_revc=None):
+        if self.parent() is None:
+            return {}
+        if data["mc_id"] is None:
+            return {}
+        return self.parent().send_request(data, show_msg, msg_revc)
+
+    def showEvent(self, event):
+        super(%(class_name)s, self).showEvent(event)
+
+    def keyPressEvent(self, event):
+        if event.key() == QtCore.Qt.Key_Escape:
+            self.close()
+        super(%(class_name)s, self).keyPressEvent(event)
+
+
+if __name__ == "__main__":
+    import sys
+    app = QtGui.QApplication(sys.argv)
+    dialog = %(class_name)s()
+    dialog.show()
+    sys.exit(app.exec_())
